@@ -17,10 +17,16 @@
           </div>
           <button type="submit" id="get_stat" class="btn btn-primary" onclick="get_data(event);">Submit</button>
         </form>
+        <div id="result">
+            <table id="date-table" style="width:100%">
+
+            </table>
+        </div>
     </div>
     <script>
     function get_data(event) {
         let company = document.getElementById('company').value;
+        let result = document.getElementById('date-table');
         let current_url = window.location.href
         let requestURL = `${current_url}get_stat?company=${company}`
         console.log(requestURL)
@@ -37,7 +43,33 @@
         }
         sendRequest('GET', requestURL)
             .then(data => {
-                console.log(data)
+                let res = `<tr>
+                            <td >Company</td>
+                            <td>Open</td>
+                            <td>High</td>
+                            <td>Low</td>
+                            <td>Close</td>
+                            <td>Adj_close</td>
+                            <td>Volume</td>
+                          </tr>
+                        `
+
+                console.log(data);
+                data.forEach((el) => {
+                    console.log(el.company)
+                    res += `
+                        <tr>
+                            <td>${el.company}</td>
+                            <td>${el.open}</td>
+                            <td>${el.high}</td>
+                            <td>${el.low}</td>
+                            <td>${el.close}</td>
+                            <td>${el.adj_close}</td>
+                            <td>${el.volume}</td>
+                          </tr>
+                    `
+                })
+                result.innerHTML = res
             })
     }
     function prvDefaultbtn() {
